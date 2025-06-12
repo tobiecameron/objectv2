@@ -1,12 +1,43 @@
 export const revalidate = 60 // Revalidate at most once per minute
 
-import { getPost } from "@/lib/sanity"
+import { getPost, getSiteSettings } from "@/lib/sanity"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PortableText } from "@portabletext/react"
+import type { Metadata } from "next"
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+type Props = {
+  params: { slug: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPost(params.slug)
+  const siteSettings = await getSiteSettings()
+
+  if (!post) {
+    return {
+      title: "Post Not Found",
+    }
+  }
+
+  const siteTitle = siteSettings?.title || "O B J E C T"
+
+  return {
+    title: `${post.title} | ${siteTitle}`,
+    description: post.excerpt || undefined,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || undefined,
+      type: "article",
+      publishedTime: post.publishedAt || undefined,
+    },
+  }
+}
+
+export default async function BlogPostPage({ params }: Props) {
+  const post = await getPost(params.slug)
+  const siteSettings = await getSiteSettings()
+  const contactEmail = siteSettings?.contactEmail || "hello@blokhouse.xyz"
 
   if (!post) {
     notFound()
@@ -29,10 +60,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <div className="prose prose-invert max-w-none">{post.content && <PortableText value={post.content} />}</div>
         </article>
 
-        {/* Email address at the bottom - updated to hello@blokhouse.xyz and 50% darker */}
+        {/* Email address at the bottom - use contactEmail from site settings */}
         <div className="text-center mt-12 pb-4 font-mono text-[0.85rem]" style={{ color: "rgba(255, 255, 255, 0.5)" }}>
-          <a href="mailto:hello@blokhouse.xyz" style={{ color: "rgba(255, 255, 255, 0.5)", textDecoration: "none" }}>
-            hello@blokhouse.xyz
+          <a href={`mailto:${contactEmail}`} style={{ color: "rgba(255, 255, 255, 0.5)", textDecoration: "none" }}>
+            {contactEmail}
           </a>
         </div>
       </div>

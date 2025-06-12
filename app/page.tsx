@@ -6,6 +6,7 @@ import DebugInfo from "@/components/debug-info"
 
 export default async function Home() {
   const siteSettings = await getSiteSettings()
+  const contactEmail = siteSettings?.contactEmail || "hello@blokhouse.xyz"
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-black center-container">
@@ -14,7 +15,7 @@ export default async function Home() {
         {siteSettings?.logo?.svgFile?.asset?.url ? (
           <img
             src={siteSettings.logo.svgFile.asset.url || "/placeholder.svg"}
-            alt="Logo"
+            alt={siteSettings.title || "Logo"}
             style={{
               width: `${siteSettings.logo.width || 200}px`,
               height: `${siteSettings.logo.height || 200}px`,
@@ -22,7 +23,7 @@ export default async function Home() {
           />
         ) : (
           <div>
-            <Image src="/logo.png" alt="Logo" width={180} height={37} priority />
+            <Image src="/logo.png" alt={siteSettings?.title || "Logo"} width={180} height={37} priority />
           </div>
         )}
 
@@ -42,10 +43,10 @@ export default async function Home() {
         )}
       </div>
 
-      {/* Email address at the bottom - updated to hello@blokhouse.xyz and 50% darker */}
+      {/* Email address at the bottom - use contactEmail from site settings */}
       <div className="email-container">
-        <a href="mailto:hello@blokhouse.xyz" className="email-link">
-          hello@blokhouse.xyz
+        <a href={`mailto:${contactEmail}`} className="email-link">
+          {contactEmail}
         </a>
       </div>
 

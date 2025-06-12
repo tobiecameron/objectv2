@@ -9,6 +9,19 @@ export default {
       type: "string",
     },
     {
+      name: "description",
+      title: "Site Description",
+      type: "text",
+      description: "A brief description of the site for SEO and social sharing",
+      rows: 3,
+    },
+    {
+      name: "keywords",
+      title: "Keywords",
+      type: "string",
+      description: "Comma-separated keywords for SEO",
+    },
+    {
       name: "logo",
       title: "Logo",
       type: "object",
@@ -69,6 +82,18 @@ export default {
           },
         },
       ],
+    },
+    {
+      name: "socialImage",
+      title: "Default Social Image",
+      type: "image",
+      description: "Image used for social media sharing (recommended: 1200x630px)",
+    },
+    {
+      name: "contactEmail",
+      title: "Contact Email",
+      type: "string",
+      description: "Main contact email address",
     },
   ],
   preview: {

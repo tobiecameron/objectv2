@@ -122,6 +122,7 @@ export async function getPost(slug: string) {
   )
 }
 
+// Update the getSiteSettings function to include the new metadata fields
 export async function getSiteSettings() {
   if (!projectId) {
     // Return null if Sanity is not configured
@@ -133,7 +134,10 @@ export async function getSiteSettings() {
     const settings = await fetchWithCache(`
       *[_type == "siteSettings"][0] {
         title,
+        description,
+        keywords,
         logoText,
+        contactEmail,
         logo {
           svgFile {
             asset->{
@@ -158,6 +162,14 @@ export async function getSiteSettings() {
               metadata {
                 dimensions
               }
+            }
+          }
+        },
+        socialImage {
+          asset->{
+            url,
+            metadata {
+              dimensions
             }
           }
         }

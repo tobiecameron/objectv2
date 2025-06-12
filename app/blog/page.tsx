@@ -1,10 +1,23 @@
 export const revalidate = 60 // Revalidate at most once per minute
 
-import { getPosts } from "@/lib/sanity"
+import { getPosts, getSiteSettings } from "@/lib/sanity"
 import Link from "next/link"
+import type { Metadata } from "next"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await getSiteSettings()
+  const siteTitle = siteSettings?.title || "O B J E C T"
+
+  return {
+    title: `Blog | ${siteTitle}`,
+    description: "Latest articles and updates",
+  }
+}
 
 export default async function BlogPage() {
   const posts = await getPosts()
+  const siteSettings = await getSiteSettings()
+  const contactEmail = siteSettings?.contactEmail || "hello@blokhouse.xyz"
 
   return (
     <main className="min-h-screen p-8 bg-black relative">
@@ -36,10 +49,10 @@ export default async function BlogPage() {
         )}
       </div>
 
-      {/* Email address at the bottom - updated to hello@blokhouse.xyz and 50% darker */}
+      {/* Email address at the bottom - use contactEmail from site settings */}
       <div className="text-center mt-12 pb-4 font-mono text-[0.85rem]" style={{ color: "rgba(255, 255, 255, 0.5)" }}>
-        <a href="mailto:hello@blokhouse.xyz" style={{ color: "rgba(255, 255, 255, 0.5)", textDecoration: "none" }}>
-          hello@blokhouse.xyz
+        <a href={`mailto:${contactEmail}`} style={{ color: "rgba(255, 255, 255, 0.5)", textDecoration: "none" }}>
+          {contactEmail}
         </a>
       </div>
     </main>

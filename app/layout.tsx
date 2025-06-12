@@ -9,26 +9,40 @@ const inter = Inter({ subsets: ["latin"] })
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteSettings = await getSiteSettings()
-  const siteTitle = siteSettings?.title || "BLOKHOUSE"
+  const siteTitle = siteSettings?.title || "O B J E C T"
+  const siteDescription = siteSettings?.description || "design and engagement solutions"
+  const siteKeywords = siteSettings?.keywords || ""
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://blokhouse.xyz"
 
   // Get favicon URLs if they exist
   const faviconUrl = siteSettings?.favicon?.mainIcon?.asset?.url
   const appleTouchIconUrl = siteSettings?.favicon?.appleTouchIcon?.asset?.url
 
+  // Get social image if it exists
+  const socialImageUrl = siteSettings?.socialImage?.asset?.url
+
   // Add metadataBase to fix the warning during build
   return {
-    title: siteTitle,
-    description: "design and engagement solutions",
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://blokhouse.xyz"),
+    title: {
+      default: siteTitle,
+      template: `%s | ${siteTitle}`,
+    },
+    description: siteDescription,
+    keywords: siteKeywords.split(",").map((keyword) => keyword.trim()),
+    metadataBase: new URL(siteUrl),
     openGraph: {
       title: siteTitle,
-      description: "design and engagement solutions",
+      description: siteDescription,
       type: "website",
+      url: siteUrl,
+      siteName: siteTitle,
+      images: socialImageUrl ? [{ url: socialImageUrl }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title: siteTitle,
-      description: "design and engagement solutions",
+      description: siteDescription,
+      images: socialImageUrl ? [socialImageUrl] : undefined,
     },
     // Add favicon icons if they exist
     icons: {
