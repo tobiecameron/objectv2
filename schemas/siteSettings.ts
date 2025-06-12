@@ -2,6 +2,13 @@ export default {
   name: "siteSettings",
   title: "Site Settings",
   type: "document",
+  fieldsets: [
+    {
+      name: 'meta',
+      title: 'Metadata',
+      options: { collapsible: true, collapsed: true },
+    },
+  ],
   fields: [
     {
       name: "title",
@@ -14,12 +21,52 @@ export default {
       type: "text",
       description: "A brief description of the site for SEO and social sharing",
       rows: 3,
+      fieldset: 'meta',
     },
     {
       name: "keywords",
       title: "Keywords",
       type: "string",
       description: "Comma-separated keywords for SEO",
+      fieldset: 'meta',
+    },
+    {
+      name: "ogTitle",
+      title: "Open Graph Title",
+      type: "string",
+      description: "Title used for social sharing (og:title)",
+      fieldset: "meta",
+    },
+    {
+      name: "ogDescription",
+      title: "Open Graph Description",
+      type: "text",
+      description: "Description used for social sharing (og:description)",
+      fieldset: "meta",
+      rows: 3,
+    },
+    {
+      name: "twitterCardType",
+      title: "Twitter Card Type",
+      type: "string",
+      description: "Card type for Twitter (e.g. summary, summary_large_image)",
+      options: {
+        list: [
+          { title: "Summary", value: "summary" },
+          { title: "Summary Large Image", value: "summary_large_image" },
+          { title: "App", value: "app" },
+          { title: "Player", value: "player" }
+        ],
+        layout: "radio"
+      },
+      fieldset: "meta",
+    },
+    {
+      name: "robots",
+      title: "Robots Meta Tag",
+      type: "string",
+      description: "e.g. index, follow or noindex, nofollow",
+      fieldset: "meta",
     },
     {
       name: "logo",

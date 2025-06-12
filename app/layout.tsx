@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${siteTitle}`,
     },
     description: siteDescription,
-    keywords: siteKeywords.split(",").map((keyword) => keyword.trim()),
+    keywords: siteKeywords ? siteKeywords.split(",").map((keyword) => keyword.trim()) : [],
     metadataBase: new URL(siteUrl),
     openGraph: {
       title: siteTitle,
